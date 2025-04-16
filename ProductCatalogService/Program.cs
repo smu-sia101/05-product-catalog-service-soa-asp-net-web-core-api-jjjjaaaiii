@@ -1,15 +1,24 @@
-using FirebaseAdmin;
-using Google.Apis.Auth.OAuth2;
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Initialize Firebase
-FirebaseApp.Create(new AppOptions()
+builder.Services.AddCors(options =>
 {
-    Credential = GoogleCredential.FromFile("firebase-adminsdk.json")
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
 });
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.MapGet("/", () => "ProductCatalog Service using Firebase!");
+app.UseHttpsRedirection();
+app.UseCors("AllowAll"); // Add this before MapControllers
+app.UseAuthorization();
+app.MapControllers();
+
 app.Run();
