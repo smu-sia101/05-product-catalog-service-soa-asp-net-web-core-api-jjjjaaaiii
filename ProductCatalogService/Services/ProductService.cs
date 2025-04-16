@@ -23,7 +23,7 @@ namespace ProductCatalogService.Services
         public async Task<Product> GetByIdAsync(string id)
         {
             var doc = await _products.Document(id).GetSnapshotAsync();
-            return doc.Exists ? doc.ConvertTo<Product>() : null;
+            return doc.Exists ? doc.ConvertTo<Product>()! : null!;
         }
 
         public async Task AddAsync(Product product)
