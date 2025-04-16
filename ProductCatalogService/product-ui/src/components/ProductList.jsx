@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getProducts, deleteProduct } from "../services/productService";
 import "./ProductList.css"; 
+
 const ProductList = ({ onEdit }) => {
   const [products, setProducts] = useState([]);
 
@@ -10,8 +11,12 @@ const ProductList = ({ onEdit }) => {
   };
 
   const handleDelete = async (id) => {
-    await deleteProduct(id);
-    fetchData();
+    try {
+      await deleteProduct(id);
+      fetchData();
+    } catch (error) {
+      console.error("Failed to delete product:", error);
+    }
   };
 
   useEffect(() => {
